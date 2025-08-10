@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parth Mahajan - Portfolio</title>
+    <meta name="description" content="The professional portfolio of Parth Mahajan, a design, business, and communications strategist.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 1. Theming & Global Styles (Inspired by Figma) */
+        :root {
+            --bg-color: #fdfcfb;
+            --text-color: #3d2c22;
+            --primary-accent: #8B4513;
+            --secondary-accent: #1d4ed8;
+            --tech-accent: #10b981; /* Brighter Green */
+            --completed-green: #16a34a;
+            --leadership-purple: #8b5cf6;
+            --high-impact-green: #059669;
+            --border-color: rgba(139, 69, 19, 0.15);
+            --card-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            --card-shadow-hover: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        /* Basic Reset & Font Setup */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor for custom follower */
+        }
+        
+        /* Hide custom cursor on touch devices */
+        @media (pointer: coarse) {
+            body { cursor: auto; }
+        }
+
+        /* 2. Mouse Follower Effect */
+        .mouse-follower {
+            position: fixed;
+            width: 10px; height: 10px;
+            background-color: var(--primary-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: multiply;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            will-change: transform;
+        }
+        .mouse-follower.hovered {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(139, 69, 19, 0.3);
+        }
+
+        /* 3. Layout & Background Grid */
+        .page-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        .background-grid {
+            position: fixed; /* Fixed position to stay in place on scroll */
+            inset: 0;
+            background-image: linear-gradient(rgba(139, 69, 19, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 69, 19, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .container {
+            max-width: 1024px; /* Increased width */
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        /* 4. Effects (Scroll & Hover) */
+        .scroll-effect {
+            opacity: 0;
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .fade-up { transform: translateY(40px); }
+        .slide-left { transform: translateX(-40px); }
+        .slide-right { transform: translateX(40px); }
+
+        .scroll-effect.visible {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+        
+        /* Staggered delay for cards */
+        .competency-card.visible:nth-child(2) { transition-delay: 200ms; }
+        .competency-card.visible:nth-child(3) { transition-delay: 100ms; }
+        .competency-card.visible:nth-child(4) { transition-delay: 300ms; }
+
+
+        /* 5. Card UI (Frosted Glass) */
+        .card {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+             transform: translateY(-4px) scale(1.02);
+             box-shadow: var(--card-shadow-hover);
+             filter: brightness(1.03); /* Brighten effect on hover */
+        }
+
+        /* 6. Typography & Links */
+        .gradient-text {
+            background-image: linear-gradient(to right, #4d2c1d, #8B4513, #b5651d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .section-heading {
+            font-size: 2.25rem;
+            font-weight: 300;
+            letter-spacing: 0.025em;
+            margin-bottom: 3rem;
+            color: #b0a8a2;
+        }
+        .link-underline {
+            position: relative;
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            cursor: none; /* Remove pointer cursor */
+        }
+        .link-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary-accent);
+            transform-origin: bottom center;
+            transition: transform 0.3s ease-out;
+        }
+        .link-underline:hover {
+            color: var(--primary-accent);
+        }
+        .link-underline:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom center;
+        }
+
+        /* 7. Component-Specific Styling */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5rem 1.5rem;
+        }
+        .hero-badge {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hero-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.1);
+        }
+        .experience-card {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .experience-card .hidden-item {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, margin-top 0.4s ease-in-out;
+            margin-top: 0;
+        }
+        .experience-card:hover .hidden-item {
+            max-height: 150px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+        .progress-bar-container {
+            width: 100%;
+            background-color: rgba(139, 69, 19, 0.1);
+            border-radius: 9999px;
+            height: 6px;
+            margin: 0.75rem 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0; /* Initial state for animation */
+            background-color: var(--primary-accent);
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 2s cubic-bezier(0.22, 1, 0.36, 1); /* 2-second ease-out animation */
+        }
+        .scroll-effect.visible .progress-bar {
+            width: var(--progress-width); /* Animate to this width when visible */
+        }
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            color: white;
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+        .tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .tag-brown { background-color: var(--primary-accent); }
+        .tag-green { background-color: var(--tech-accent); }
+        .tag-purple { background-color: var(--leadership-purple); }
+        .tag-impact { background-color: var(--high-impact-green); }
+        .star-icon {
+            transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); /* Slower spin */
+        }
+        .star-icon:hover {
+            transform: rotate(360deg);
+        }
+        .project-card-content {
+            flex-grow: 1;
+        }
+        .project-tag {
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            background-color: transparent;
+        }
+        .project-card .key-highlights {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, margin-top 0.5s ease-in-out;
+            margin-top: 0;
+        }
+        .project-card:hover .key-highlights {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 1.5rem;
+        }
+        .project-card .key-highlights li {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        .project-card:hover .key-highlights li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .project-card:hover .key-highlights li:nth-child(1) { transition-delay: 100ms; }
+        .project-card:hover .key-highlights li:nth-child(2) { transition-delay: 200ms; }
+        .project-card:hover .key-highlights li:nth-child(3) { transition-delay: 300ms; }
+        .project-card:hover .key-highlights li:nth-child(4) { transition-delay: 400ms; }
+
+        .view-project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.875rem;
+            cursor: none;
+        }
+        .view-project-link .eye-icon {
+            transition: transform 0.3s ease;
+        }
+        .view-project-link:hover {
+            color: var(--tech-accent);
+        }
+        .view-project-link:hover .eye-icon {
+            transform: scale(1.2);
+        }
+        
+        /* Internship Section Styles */
+        .internship-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .internship-card .internship-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .internship-card .internship-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #78716c;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .internship-card .internship-duties {
+            list-style: none;
+            padding-left: 0;
+            color: #57534e;
+            line-height: 1.7;
+            font-size: 0.9rem;
+        }
+        .internship-card .internship-duties li {
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .internship-card .internship-duties li:not(:last-child) {
+            margin-bottom: 0.5rem;
+        }
+        .internship-card .internship-duties li::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0.6em;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-accent);
+            border-radius: 50%;
+        }
+        .internship-card:hover {
+            transform: translateY(-8px) scale(1.03) !important;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+        .internship-container .scroll-effect.visible:nth-child(1) { transition-delay: 100ms; }
+        .internship-container .scroll-effect.visible:nth-child(2) { transition-delay: 300ms; }
+        .internship-container .scroll-effect.visible:nth-child(3) { transition-delay: 500ms; }
+        
+        /* Certifications Section Styles */
+        .certifications-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .certification-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 150px; /* Increased height for smoother falloff */
+            border-radius: inherit;
+            background: radial-gradient(500px circle at var(--mouse-x) 150%, rgba(139, 69, 19, 0.25), transparent 80%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none; /* Make sure it doesn't block mouse events */
+        }
+        .certification-card:hover::before {
+            opacity: 1;
+        }
+        .certification-card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .certification-card h3 {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin: 0 0 0.25rem 0;
+        }
+        .certification-card p {
+            font-size: 0.875rem;
+            color: #78716c;
+            margin: 0;
+        }
+        .certification-verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--completed-green);
+            font-size: 0.8rem;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+        .certification-verified-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+        .certifications-grid .scroll-effect.visible:nth-child(1) { transition-delay: 100ms; }
+        .certifications-grid .scroll-effect.visible:nth-child(2) { transition-delay: 200ms; }
+        .certifications-grid .scroll-effect.visible:nth-child(3) { transition-delay: 300ms; }
+        .certifications-grid .scroll-effect.visible:nth-child(4) { transition-delay: 400ms; }
+
+        /* Hero Welcome Animation */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .hero-item {
+          opacity: 0; /* Start hidden */
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .hero-badge { animation-delay: 0.2s; }
+        .hero-title { animation-delay: 0.4s; }
+        .hero-location { animation-delay: 0.6s; }
+        .hero-links { animation-delay: 0.8s; }
+        .hero-scroll-indicator { animation-delay: 1.2s; }
+
+        /* Utility Classes for Grid & Flex */
+        .grid { display: grid; }
+        .gap-6 { gap: 1.5rem; }
+        .md-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .space-y-24 > :not([hidden]) ~ :not([hidden]) { margin-top: 6rem; }
+        
+        /* Footer styling */
+        .footer {
+            border-top: 1px solid rgba(0,0,0,0.07);
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 3rem 1.5rem;
+            margin-top: 6rem;
+        }
+        .footer-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .footer-icons a {
+            color: var(--text-color);
+            transition: color 0.3s ease, transform 0.3s ease;
+            cursor: none;
+        }
+        .footer-icons a:hover {
+            color: var(--primary-accent);
+            transform: scale(1.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .md-grid-cols-2, .certifications-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-heading {
+                font-size: 1.75rem;
+            }
+            .internship-card .internship-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mouse-follower"></div>
+
+    <div class="page-wrapper">
+        <div class="background-grid"></div>
+
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="hero-content" style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                <div class="hero-badge interactive-element hero-item" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 6px 16px; background-color: rgba(245, 245, 244, 0.6); border-radius: 9999px; border: 1px solid rgba(229, 231, 235, 0.5); backdrop-filter: blur(4px);">
+                    <div style="width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%; animation: pulse 2s infinite;"></div>
+                    <span style="font-size: 0.75rem; color: #57534e;">Available for elite opportunities</span>
+                </div>
+                <h1 class="gradient-text hero-title hero-item" style="font-size: clamp(2.5rem, 10vw, 4.5rem); font-weight: 300; letter-spacing: -0.025em;">
+                    PARTH <span style="font-weight: 500;">MAHAJAN</span>
+                </h1>
+                <div class="hero-location hero-item" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: #78716c; font-size: 0.875rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-accent);"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <span>New Delhi, India</span>
+                </div>
+                <div class="hero-links hero-item" style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem 1.5rem; padding-top: 1rem; font-size: 0.875rem; color: #57534e;">
+                    <a href="mailto:mahajanparth6996@gmail.com" class="interactive-element link-underline">Email</a>
+                    <a href="tel:+919541012236" class="interactive-element link-underline">Phone</a>
+                    <a href="https://www.linkedin.com/in/parth-mahajan-3aa20a233/" target="_blank" class="interactive-element link-underline">LinkedIn</a>
+                </div>
+                <div class="hero-scroll-indicator hero-item" style="padding-top: 2rem; animation: bounce 2s infinite;">
+                    <div class="interactive-element" style="cursor: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: auto; color: var(--primary-accent);"><path d="m6 9 6 6 6-6"></path></svg>
+                    </div>
+                </div>
+                 <style>@keyframes pulse { 50% { opacity: .5; } } @keyframes bounce { 0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: translateY(0); animation-timing-function: cubic-bezier(0,0,0.2,1); } }</style>
+            </div>
+        </header>
+
+        <main class="container space-y-24" style="padding-bottom: 5rem;">
+            
+            <section id="summary" class="scroll-effect fade-up">
+                <div class="card transition-all-ultra interactive-element">
+                    <h2 class="section-heading" style="margin-bottom: 1rem; font-size: 1.5rem;">Professional Summary</h2>
+                    <p style="font-size: 1.125rem; color: #57534e; line-height: 1.7;">Strategic leader and visionary communicator with a proven record of transforming organizations through exceptional leadership. As General Secretary of Spade Shivaji Society, I led initiatives impacting 5,000+ students. My experience as Recruitment Marketing Manager at Talent Wing Consultants includes elevating brand narratives and market positioning with innovative digital strategies. I combine analytical precision, creative insight, and strategic vision to consistently deliver outstanding results in recruitment marketing and communication excellence.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-heading scroll-effect slide-right">Core Competencies</h2>
+                <div class="grid gap-6 md-grid-cols-2">
+                    <!-- Strategic Communication -->
+                    <div class="card transition-all-ultra interactive-element scroll-effect slide-left competency-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                           <h3 style="font-size: 1.25rem; font-weight: 500; margin: 0;">Strategic Communication</h3>
+                           <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; color: var(--primary-accent); font-weight: 500;">
+                               <span>90%</span>
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" class="star-icon interactive-element"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
+                           </div>
+                        </div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="--progress-width: 90%;"></div></div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><span class="tag tag-brown interactive-element">Public Relations</span><span class="tag tag-brown interactive-element">Media Relations</span><span class="tag tag-brown interactive-element">Strategic Planning</span></div>
+                    </div>
+                    <!-- Digital Marketing -->
+                    <div class="card transition-all-ultra interactive-element scroll-effect slide-right competency-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                           <h3 style="font-size: 1.25rem; font-weight: 500; margin: 0;">Digital Marketing</h3>
+                           <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; color: var(--primary-accent); font-weight: 500;">
+                               <span>88%</span>
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" class="star-icon interactive-element"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
+                           </div>
+                        </div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="--progress-width: 88%;"></div></div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><span class="tag tag-brown interactive-element">Content Strategy</span><span class="tag tag-brown interactive-element">Brand Communication</span><span class="tag tag-brown interactive-element">Social Media</span></div>
+                    </div>
+                    <!-- Leadership -->
+                    <div class="card transition-all-ultra interactive-element scroll-effect slide-left competency-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                           <h3 style="font-size: 1.25rem; font-weight: 500; margin: 0;">Leadership</h3>
+                           <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; color: var(--primary-accent); font-weight: 500;">
+                               <span>92%</span>
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" class="star-icon interactive-element"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
+                           </div>
+                        </div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="--progress-width: 92%;"></div></div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><span class="tag tag-brown interactive-element">Team Leadership</span><span class="tag tag-brown interactive-element">Project Management</span><span class="tag tag-brown interactive-element">Strategic Oversight</span></div>
+                    </div>
+                    <!-- Technology -->
+                    <div class="card transition-all-ultra interactive-element scroll-effect slide-right competency-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                           <h3 style="font-size: 1.25rem; font-weight: 500; margin: 0;">Technology</h3>
+                           <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; color: var(--primary-accent); font-weight: 500;">
+                               <span>85%</span>
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" class="star-icon interactive-element"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
+                           </div>
+                        </div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="--progress-width: 85%;"></div></div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><span class="tag tag-green interactive-element">UI/UX Design</span><span class="tag tag-green interactive-element">Figma Mastery</span><span class="tag tag-green interactive-element">Web Development</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects">
+                <h2 class="section-heading scroll-effect fade-up">Featured Projects</h2>
+                <div class="grid gap-6 md-grid-cols-2">
+                    <!-- Project 1: Elite Portfolio -->
+                    <div class="card transition-all-ultra interactive-element project-card scroll-effect slide-left">
+                        <div class="project-card-content">
+                            <h3 style="font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem;">Elite Portfolio Design Mastery <span class="tag tag-brown" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Design Excellence Project</span></h3>
+                            <p style="color: #78716c; font-size: 0.8rem; margin-bottom: 1rem;">2025 • <span style="color: var(--completed-green); font-weight: 500;">Completed</span> • Advanced Design Proficiency</p>
+                            <p style="color: #57534e; line-height: 1.6; font-size: 0.9rem;">Demonstrated exceptional design prowess by crafting this sophisticated portfolio from concept to completion using advanced Figma techniques. Showcased rapid skill evolution from beginner to intermediate proficiency, mastering complex design systems, component libraries, and cutting-edge UI/UX principles that set new standards for digital portfolio excellence.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                                <span class="tag project-tag interactive-element">Figma Design</span>
+                                <span class="tag project-tag interactive-element">UI/UX Mastery</span>
+                                <span class="tag project-tag interactive-element">Component Systems</span>
+                                <span class="tag project-tag interactive-element">Design Thinking</span>
+                                <span class="tag project-tag interactive-element">Visual Hierarchy</span>
+                            </div>
+                        </div>
+                        <div class="key-highlights">
+                            <h4 style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Key Highlights:</h4>
+                            <ul style="list-style-position: inside; padding-left: 0; color: #57534e; line-height: 1.6; font-size: 0.85rem;">
+                                <li>Mastered Figma from beginner to intermediate level in record time.</li>
+                                <li>Created sophisticated design systems with reusable components.</li>
+                                <li>Implemented advanced UI/UX principles and visual storytelling.</li>
+                                <li>Achieved professional-grade portfolio design that rivals industry leaders.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Project 2: Nutgirri -->
+                    <div class="card transition-all-ultra interactive-element project-card scroll-effect slide-right">
+                        <div class="project-card-content">
+                            <h3 style="font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem;">Nutgirri Brand MVP Website <span class="tag tag-brown" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Enterprise Development Project</span></h3>
+                            <p style="color: #78716c; font-size: 0.8rem; margin-bottom: 1rem;">2025 • <span style="color: var(--completed-green); font-weight: 500;">Completed</span> • Full-Scale Business Solution</p>
+                            <p style="color: #57534e; line-height: 1.6; font-size: 0.9rem;">Architected and delivered a comprehensive, fully-functional company website for Nutgirri, demonstrating elite technical capabilities and strategic business acumen. Transformed brand vision into a powerful digital presence through sophisticated design execution, seamless user experience, and enterprise-level functionality that drives business growth and market positioning.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                                <span class="tag project-tag interactive-element">Web Development</span>
+                                <span class="tag project-tag interactive-element">Brand Strategy</span>
+                                <span class="tag project-tag interactive-element">Figma Design</span>
+                                <span class="tag project-tag interactive-element">Business Analysis</span>
+                                <span class="tag project-tag interactive-element">Digital Architecture</span>
+                            </div>
+                        </div>
+                         <div class="key-highlights">
+                            <h4 style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Key Highlights:</h4>
+                            <ul style="list-style-position: inside; padding-left: 0; color: #57534e; line-height: 1.6; font-size: 0.85rem;">
+                                <li>Developed complete enterprise-grade website from concept to deployment.</li>
+                                <li>Integrated advanced business strategy with cutting-edge technical execution.</li>
+                                <li>Created scalable digital architecture for sustained business growth.</li>
+                                <li>Delivered professional solution exceeding corporate standards and expectations.</li>
+                            </ul>
+                        </div>
+                        <div class="project-links" style="margin-top: 1.5rem;">
+                            <a href="https://whoop-future-91054514.figma.site/" target="_blank" class="view-project-link interactive-element">
+                                <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <span>View Project</span>
+                            </a>
+                        </div>
+                    </div>
+                     <!-- Project 3: College Event Management -->
+                    <div class="card transition-all-ultra interactive-element project-card scroll-effect slide-left">
+                        <div class="project-card-content">
+                            <h3 style="font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem;">College Event Management <span class="tag tag-brown" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Leadership Project</span></h3>
+                            <p style="color: #78716c; font-size: 0.8rem; margin-bottom: 1rem;">2024-2025 • <span style="color: var(--completed-green); font-weight: 500;">Completed</span> • 5,000+ Students Engaged</p>
+                            <p style="color: #57534e; line-height: 1.6; font-size: 0.9rem;">Spearheaded comprehensive event management initiatives across Anchorage and Spade Shivaji societies, orchestrating large-scale college events with strategic planning, seamless execution, and exceptional stakeholder coordination that engaged over 5,000 students.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                                <span class="tag project-tag interactive-element">Strategic Planning</span>
+                                <span class="tag project-tag interactive-element">Event Coordination</span>
+                                <span class="tag project-tag interactive-element">Public Relations</span>
+                                <span class="tag project-tag interactive-element">Digital Marketing</span>
+                            </div>
+                        </div>
+                        <div class="key-highlights">
+                            <h4 style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Key Highlights:</h4>
+                            <ul style="list-style-position: inside; padding-left: 0; color: #57534e; line-height: 1.6; font-size: 0.85rem;">
+                                <li>Led planning and execution for Anchorage (3,000 students) and Spade (2,000 students).</li>
+                                <li>Implemented strategic communication protocols across multiple stakeholder groups.</li>
+                                <li>Coordinated seamlessly with faculty, administration, and student bodies.</li>
+                                <li>Achieved 95% event success rate with exceptional participant satisfaction.</li>
+                            </ul>
+                        </div>
+                        <div class="project-links" style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                             <a href="https://www.instagram.com/shivaji_cultural/?igsh=OGhiMmU3eHhsOWhp#" target="_blank" class="view-project-link interactive-element">
+                                <span>◎ Anchorage</span>
+                            </a>
+                             <a href="https://www.instagram.com/accounts/login/?next=%2Fspade.shivaji%2F&source=omni_redirect" target="_blank" class="view-project-link interactive-element">
+                                <span>◎ Spade</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Project 4: Recruitment Campaign -->
+                    <div class="card transition-all-ultra interactive-element project-card scroll-effect slide-right">
+                        <div class="project-card-content">
+                            <h3 style="font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem;">Recruitment Marketing Campaign <span class="tag tag-brown" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Marketing Project</span></h3>
+                            <p style="color: #78716c; font-size: 0.8rem; margin-bottom: 1rem;">2025 • <span style="color: var(--completed-green); font-weight: 500;">Completed</span> • 200% Engagement Increase</p>
+                            <p style="color: #57534e; line-height: 1.6; font-size: 0.9rem;">Revolutionized digital marketing strategy for Talent Wing Consultants through masterful Canva design excellence, creating visually stunning templates and content strategies that transformed brand communication and candidate acquisition processes.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                                <span class="tag project-tag interactive-element">Canva Excellence</span>
+                                <span class="tag project-tag interactive-element">Content Marketing</span>
+                                <span class="tag project-tag interactive-element">Social Media Strategy</span>
+                                <span class="tag project-tag interactive-element">Brand Communication</span>
+                                <span class="tag project-tag interactive-element">Template Design</span>
+                            </div>
+                        </div>
+                         <div class="key-highlights">
+                            <h4 style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Key Highlights:</h4>
+                            <ul style="list-style-position: inside; padding-left: 0; color: #57534e; line-height: 1.6; font-size: 0.85rem;">
+                                <li>Mastered Canva to create exceptional visual templates and marketing materials.</li>
+                                <li>Designed targeted social media strategies with superior visual storytelling.</li>
+                                <li>Created content perfectly tailored to hiring trends and audience behavior.</li>
+                                <li>Enhanced brand visibility and client engagement through design excellence.</li>
+                            </ul>
+                        </div>
+                        <div class="project-links" style="margin-top: 1.5rem;">
+                             <a href="https://www.canva.com/design/DAGtf67YOa8/uCk9kiUe7NQWSX4gMPIp9A/edit" target="_blank" class="view-project-link interactive-element">
+                                <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <span>View Project</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Project 5: Audit Process Optimization -->
+                    <div class="card transition-all-ultra interactive-element project-card scroll-effect slide-left">
+                        <div class="project-card-content">
+                            <h3 style="font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem;">Audit Process Optimization <span class="tag tag-brown" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Professional Project</span></h3>
+                            <p style="color: #78716c; font-size: 0.8rem; margin-bottom: 1rem;">2024-2025 • <span style="color: var(--completed-green); font-weight: 500;">Completed</span> • 30% Time Reduction</p>
+                            <p style="color: #57534e; line-height: 1.6; font-size: 0.9rem;">Streamlined audit procedures for various trading and manufacturing concerns, implementing systematic approaches to financial analysis and compliance checking with remarkable efficiency and precision.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                                <span class="tag project-tag interactive-element">Financial Analysis</span>
+                                <span class="tag project-tag interactive-element">Process Optimization</span>
+                                <span class="tag project-tag interactive-element">Compliance</span>
+                                <span class="tag project-tag interactive-element">Documentation</span>
+                            </div>
+                        </div>
+                        <div class="key-highlights">
+                            <h4 style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Key Highlights:</h4>
+                            <ul style="list-style-position: inside; padding-left: 0; color: #57534e; line-height: 1.6; font-size: 0.85rem;">
+                                <li>Conducted comprehensive financial audits with exceptional attention to detail.</li>
+                                <li>Identified and resolved critical discrepancies saving clients significant resources.</li>
+                                <li>Streamlined financial processes through innovative systematic approaches.</li>
+                                <li>Improved compliance procedures with industry-leading methodologies.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Project 6: Strategic Communication Framework -->
+                    <div class="card transition-all-ultra interactive-element project-card scroll-effect slide-right">
+                        <div class="project-card-content">
+                            <h3 style="font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem;">Strategic Communication & Analytics Framework <span class="tag tag-brown" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Strategy & Analytics Project</span></h3>
+                            <p style="color: #78716c; font-size: 0.8rem; margin-bottom: 1rem;">2024 • <span style="color: var(--completed-green); font-weight: 500;">Completed</span> • Enhanced Decision-Making & Relations</p>
+                            <p style="color: #57534e; line-height: 1.6; font-size: 0.9rem;">Developed and implemented a comprehensive communication strategy integrated with advanced performance analytics, creating a unified framework for multi-stakeholder environments that drives measurable outcomes and strategic decision-making.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                                <span class="tag project-tag interactive-element">Strategic Planning</span>
+                                <span class="tag project-tag interactive-element">Stakeholder Management</span>
+                                <span class="tag project-tag interactive-element">Performance Analytics</span>
+                                <span class="tag project-tag interactive-element">Data-Driven Communication</span>
+                                <span class="tag project-tag interactive-element">Metrics Tracking</span>
+                            </div>
+                        </div>
+                        <div class="key-highlights">
+                            <h4 style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Key Highlights:</h4>
+                            <ul style="list-style-position: inside; padding-left: 0; color: #57534e; line-height: 1.6; font-size: 0.85rem;">
+                                <li>Built robust internal and external networks through strategic relationship management.</li>
+                                <li>Implemented comprehensive analytics framework for tracking strategic outcomes.</li>
+                                <li>Enhanced multicultural event marketing with data-driven insights.</li>
+                                <li>Created performance tracking systems that improved operational efficiency by 40%.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="education">
+                <h2 class="section-heading scroll-effect fade-up">Education</h2>
+                <div class="grid gap-6">
+                     <div class="card transition-all-ultra interactive-element scroll-effect fade-up education-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <h3 style="font-weight: 500; font-size: 1.125rem; margin: 0;">Bachelor of Arts - Economics Major and English (Minor)</h3>
+                                <p style="color: #166534; margin: 0.25rem 0;">Shivaji College, University of Delhi</p>
+                                <p style="color: #78716c; font-size: 0.875rem; margin-top: 0.5rem;">Status: Current</p>
+                            </div>
+                            <p style="color: #78716c; font-size: 0.875rem;">Aug 2023 - June 2026</p>
+                        </div>
+                     </div>
+                      <div class="card transition-all-ultra interactive-element scroll-effect fade-up education-card">
+                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                             <div>
+                                <h3 style="font-weight: 500; font-size: 1.125rem; margin: 0;">Senior Secondary - Commerce without Maths</h3>
+                                <p style="color: #166534; margin: 0.25rem 0;">Jodhamal Public School, Jammu (CBSE)</p>
+                                <p style="color: #78716c; font-size: 0.875rem; margin-top: 0.5rem;">Status: Completed</p>
+                            </div>
+                            <p style="color: #78716c; font-size: 0.875rem;">April 2021 - May 2023</p>
+                        </div>
+                     </div>
+                     <div class="card transition-all-ultra interactive-element scroll-effect fade-up education-card">
+                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                             <div>
+                                <h3 style="font-weight: 500; font-size: 1.125rem; margin: 0;">Secondary</h3>
+                                <p style="color: #166534; margin: 0.25rem 0;">Jodhamal Public School, Jammu (CBSE)</p>
+                                <p style="color: #78716c; font-size: 0.875rem; margin-top: 0.5rem;">Status: Completed</p>
+                            </div>
+                            <p style="color: #78716c; font-size: 0.875rem;">April 2010 - March 2021</p>
+                        </div>
+                     </div>
+                </div>
+            </section>
+
+            <section class="scroll-effect fade-up">
+                <h2 class="section-heading">Work & Leadership Experience</h2>
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="card transition-all-ultra interactive-element experience-card">
+                        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <div>
+                                <h3 style="font-size: 1.25rem; font-weight: 500; margin: 0;">General Secretary <span class="tag tag-purple" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Leadership Role</span></h3>
+                                <p style="color: var(--secondary-accent); margin: 0.25rem 0 0 0; font-size: 0.9rem;">Spade Shivaji</p>
+                            </div>
+                            <p style="color: #78716c; font-size: 0.875rem;">July 2024 - July 2025</p>
+                        </div>
+                        <ul style="list-style-position: inside; padding-left: 0; color: #57534e; line-height: 1.6; font-size: 0.9rem;">
+                            <li>General Secretary leading all internal planning and execution of major college events and initiatives.</li>
+                            <li>Worked with students, faculty and administration with a visible commitment and attention to detail.</li>
+                            <li class="hidden-item">Built strong internal and external networks through strategic public relations.</li>
+                            <li class="hidden-item">Key decision maker on multicultural, sponsored, and event marketing.</li>
+                            <li class="hidden-item">The go-to problem solver and driving force behind every successful outcome.</li>
+                        </ul>
+                    </div>
+                    <div class="card transition-all-ultra interactive-element experience-card">
+                         <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <div>
+                                <h3 style="font-size: 1.25rem; font-weight: 500; margin: 0;">Recruitment Marketing Manager <span class="tag tag-purple" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Strategic Role</span></h3>
+                                <p style="color: var(--secondary-accent); margin: 0.25rem 0 0 0; font-size: 0.9rem;">Talent Wing Consultants LLP</p>
+                            </div>
+                            <p style="color: #78716c; font-size: 0.875rem;">Jan 2025 - March 2025</p>
+                        </div>
+                         <ul style="list-style-position: inside; padding-left: 0; color: #57534e; line-height: 1.6; margin-top: 1rem; font-size: 0.9rem;">
+                            <li>Content Creator & Strategist at Talent Wing Consultants, leading brand communication for a fast-growing consultancy firm.</li>
+                            <li>Designed social media strategies to attract top per cent candidates and corporate clients.</li>
+                            <li class="hidden-item">Implementing innovative recruitment strategies including content tailored to hiring trends and audience behavior.</li>
+                            <li class="hidden-item">Collaborated with the recruitment team to align content strategies and streamline operations.</li>
+                        </ul>
+                    </div>
+                    <div class="card transition-all-ultra interactive-element">
+                         <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <div>
+                                <h3 style="font-size: 1.25rem; font-weight: 500; margin: 0;">Auditing <span class="tag tag-purple" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Professional Experience</span></h3>
+                                <p style="color: var(--secondary-accent); margin: 0.25rem 0 0 0; font-size: 0.9rem;">Gupta Gupta & Associates LLP</p>
+                            </div>
+                            <p style="color: #78716c; font-size: 0.875rem;">Jan 2024 - August 2024</p>
+                        </div>
+                    </div>
+                    <div class="card transition-all-ultra interactive-element">
+                         <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <div>
+                                <h3 style="font-size: 1.25rem; font-weight: 500; margin: 0;">Public Relations Executive - Anchorage <span class="tag tag-purple" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Executive Role</span></h3>
+                                <p style="color: var(--secondary-accent); margin: 0.25rem 0 0 0; font-size: 0.9rem;">Spade Shivaji</p>
+                            </div>
+                            <p style="color: #78716c; font-size: 0.875rem;">October 2024 - February 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="internships">
+                 <h2 class="section-heading scroll-effect fade-up">Internships</h2>
+                 <div class="internship-container">
+                    <!-- Auditing Internship -->
+                    <div class="card transition-all-ultra interactive-element internship-card scroll-effect fade-up">
+                        <div class="internship-header">
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Auditing <span class="tag tag-impact" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">High Impact</span></h3>
+                                <p style="color: var(--secondary-accent); font-size: 0.875rem;">Gupta Gupta & Associates LLP</p>
+                            </div>
+                            <div class="internship-date">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                <span>May 2024 - August 2024 | Jan 2025 - Feb 2025</span>
+                            </div>
+                        </div>
+                        <ul class="internship-duties">
+                            <li>Conducted Audit of various trading and manufacturing concerns.</li>
+                            <li>Assisted in various Audit procedures and TDS returns.</li>
+                            <li>Played a key role in identifying discrepancies and streamlining financial processes for clients.</li>
+                        </ul>
+                    </div>
+                    <!-- Recruitment Marketing Internship -->
+                    <div class="card transition-all-ultra interactive-element internship-card scroll-effect fade-up">
+                        <div class="internship-header">
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Recruitment Marketing Manager <span class="tag tag-impact" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">High Impact</span></h3>
+                                <p style="color: var(--secondary-accent); font-size: 0.875rem;">Talent Wing Consultants LLP</p>
+                            </div>
+                            <div class="internship-date">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                <span>Jan 2025 - March 2025</span>
+                            </div>
+                        </div>
+                        <ul class="internship-duties">
+                             <li>Led content strategy and recruitment marketing efforts to enhance Talent Wing Consultant's brand presence and client engagement.</li>
+                             <li>Developed targeted communication to attract top-tier candidates while serving diverse industries.</li>
+                             <li>Developed employer branding campaigns to position clients as preferred workplaces.</li>
+                             <li>Bridged gap between recruitment teams through social media engagement in various industries.</li>
+                        </ul>
+                    </div>
+                    <!-- Technical Head Internship -->
+                    <div class="card transition-all-ultra interactive-element internship-card scroll-effect fade-up">
+                        <div class="internship-header">
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Technical Head <span class="tag tag-brown" style="font-size: 0.65rem; padding: 2px 8px; vertical-align: middle;">Medium Impact</span></h3>
+                                <p style="color: var(--secondary-accent); font-size: 0.875rem;">Democratic Shivaji College</p>
+                            </div>
+                            <div class="internship-date">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                <span>October 2024 - May 2025</span>
+                            </div>
+                        </div>
+                        <ul class="internship-duties">
+                            <li>Served as Technical Head, leading the design and visual communication for all major events.</li>
+                            <li>Designed impactful event posters and digital creatives using Canva, enhancing event branding and engagement.</li>
+                            <li>Managed technical coordination and ensured smooth execution of event branding and promotions.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+             <section id="certifications" class="scroll-effect fade-up">
+                 <h2 class="section-heading">Certifications</h2>
+                 <div class="certifications-grid">
+                    <!-- Auditing Certification -->
+                    <div class="card certification-card interactive-element scroll-effect fade-up">
+                        <div class="certification-card-content">
+                            <div>
+                                <h3>Auditing</h3>
+                                <p>Gupta Gupta & Associates LLP</p>
+                                <p>June 2024</p>
+                            </div>
+                            <div class="certification-verified-badge">
+                                <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span>Verified</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Recruitment Marketing Manager Certification -->
+                    <div class="card certification-card interactive-element scroll-effect fade-up">
+                        <div class="certification-card-content">
+                            <div>
+                                <h3>Recruitment Marketing Manager</h3>
+                                <p>Talent Wing Consultants LLP</p>
+                                <p>May 2025</p>
+                            </div>
+                            <div class="certification-verified-badge">
+                                <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span>Verified</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- General Secretary Certification -->
+                    <div class="card certification-card interactive-element scroll-effect fade-up">
+                        <div class="certification-card-content">
+                            <div>
+                                <h3>General Secretary</h3>
+                                <p>Spade Shivaji</p>
+                                <p>Jan 2025</p>
+                            </div>
+                            <div class="certification-verified-badge">
+                                <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span>Verified</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Public Relations Executive Certification -->
+                    <div class="card certification-card interactive-element scroll-effect fade-up">
+                        <div class="certification-card-content">
+                            <div>
+                                <h3>Public Relations Executive - Anchorage</h3>
+                                <p>Spade Shivaji</p>
+                                <p>Dec 2024</p>
+                            </div>
+                            <div class="certification-verified-badge">
+                                <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span>Verified</span>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </section>
+
+        </main>
+
+        <footer class="footer scroll-effect fade-up">
+            <div class="container" style="text-align: center;">
+                <div class="footer-icons">
+                    <a href="tel:+919541012236" class="interactive-element" aria-label="Call Parth Mahajan">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </a>
+                    <a href="mailto:mahajanparth6996@gmail.com" class="interactive-element" aria-label="Email Parth Mahajan">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/parth-mahajan-3aa20a233/" target="_blank" class="interactive-element" aria-label="Parth Mahajan on LinkedIn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    </a>
+                </div>
+                <p style="color: #78716c; font-size: 0.875rem; margin-bottom: 0.5rem;">© 2025 Parth Mahajan. All rights reserved.</p>
+                <p style="color: var(--primary-accent); font-size: 0.875rem;">Crafted with elite precision and innovative excellence</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- MOUSE FOLLOWER LOGIC ---
+            const follower = document.querySelector('.mouse-follower');
+            const interactiveElements = document.querySelectorAll('a, button, .interactive-element');
+            const isTouchDevice = 'ontouchstart' in window;
+            if (isTouchDevice) {
+                if (follower) follower.style.display = 'none';
+                document.body.style.cursor = 'auto';
+            } else {
+                if (follower) {
+                    window.addEventListener('mousemove', (e) => {
+                        follower.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+                    });
+                    interactiveElements.forEach(el => {
+                        el.addEventListener('mouseenter', () => follower.classList.add('hovered'));
+                        el.addEventListener('mouseleave', () => follower.classList.remove('hovered'));
+                    });
+                }
+            }
+
+            // --- SCROLL REVEAL LOGIC FOR SECTIONS ---
+            const revealElements = document.querySelectorAll('.scroll-effect');
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            revealElements.forEach(elem => observer.observe(elem));
+
+            // --- GRADIENT HOVER FOR CERTIFICATION CARDS ---
+            const certCards = document.querySelectorAll('.certification-card');
+            certCards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
